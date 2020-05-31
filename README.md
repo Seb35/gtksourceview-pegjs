@@ -6,9 +6,7 @@ This is the GtkSourceView syntax highlighting for [PEG.js grammars](https://pegj
 Installation
 ------------
 
-It can be installed in `~/.local/share/gtksourceview-3.0/language-specs`,
-or `/usr/local/share/gtksourceview-3.0/language-specs`,
-or `/usr/share/gtksourceview-3.0/language-specs`.
+It can be installed in `~/.local/share/gtksourceview-3.0/language-specs`, or `/usr/local/share/gtksourceview-3.0/language-specs`, or `/usr/share/gtksourceview-3.0/language-specs`.
 
 Licence
 -------
@@ -18,4 +16,4 @@ WTFPL 2.0
 Development
 -----------
 
-See https://developer.gnome.org/gtksourceview/unstable/syntax-highlighting-reference.html for reference.
+See https://wiki.gnome.org/Projects/GtkSourceView and https://developer.gnome.org/gtksourceview/unstable/syntax-highlighting-reference.html for reference.
