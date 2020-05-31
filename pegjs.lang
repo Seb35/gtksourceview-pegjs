@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+ This file is part of GtkSourceView.
+
+ This is the syntax highlighting for PEG.js <https://pegjs.org>.
+
+ Licence: WTFPL 2.0
+
+-->
+<language id="pegjs" name="PEG.js" version="2.0" _section="Other">
+  <metadata>
+    <property name="globs">*.pegjs</property>
+    <property name="line-comment-start">//</property>
+    <property name="block-comment-start">/*</property>
+    <property name="block-comment-end">*/</property>
+  </metadata>
+
+  <styles>
+    <style id="escape"          name="Escaped Character"        map-to="def:special-char"/>
+    <style id="string"          name="String"                   map-to="def:string"/>
+    <style id="regex"           name="Regular Expression"       map-to="def:string"/>
+  </styles>
+
+  <definitions>
+
+    <!--contexts NOT used in the main context-->
+
+    <!--See rule EscapeSequence in parser.pegjs-->
+    <context id="escape" style-ref="escape">
+      <match>\\(0([0-9])|([1-9])|['"\\bfnrtv]|x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|.)</match>
+      <include>
+        <context id="escape-error-1" sub-pattern="2" style-ref="def:error"/>
+        <context id="escape-error-2" sub-pattern="3" style-ref="def:error"/>
+      </include>
+    </context>
+
+    <!--This is a trick to apply JavaScript syntax highlighting inside matching curly brackets.-->
+    <!--It does not work with a single context js-code; two are necessary.-->
+    <context id="js-code-bis">
+      <start>\{</start>
+      <end>\}</end>
+      <include>
+        <context ref="js-code"/>
+        <context ref="js:js"/>
+      </include>
+    </context>
+
+    <!--contexts used in the main context-->
+
+    <!--See rule CharacterClassMatcher in parser.pegjs-->
+    <context id="class" style-ref="regex">
+      <start extended="true">
+        \[
+        (?=
+          \^?
+          ([^\]\\]*(\\.))*
+          [^\]]*
+          \]
+          i?
+        )</start>
+      <end>\]i?</end>
+      <include>
+        <context ref="escape"/>
+        <context ref="def:line-continue"/>
+      </include>
+    </context>
+
+    <context id="js-code">
+      <start>\{</start>
+      <end>\}</end>
+      <include>
+        <context ref="js-code-bis"/>
+        <context ref="js:js"/>
+      </include>
+    </context>
+
+    <!--See rule DoubleStringCharacter in parser.pegjs-->
+    <context id="string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+      <start>"</start>
+      <end>"i?</end>
+      <include>
+        <context ref="escape"/>
+        <context ref="def:line-continue"/>
+      </include>
+    </context>
+
+    <!--See rule SingleStringCharacter in parser.pegjs-->
+    <context id="single-quoted-string" style-ref="string" end-at-line-end="true" class="string" class-disabled="no-spell-check">
+      <start>'</start>
+      <end>'i?</end>
+      <include>
+        <context ref="escape"/>
+        <context ref="def:line-continue"/>
+      </include>
+    </context>
+
+    <!--main context-->
+    <context id="pegjs" class="no-spell-check">
+      <include>
+        <context ref="def:c-like-comment"/>
+        <context ref="def:c-like-comment-multiline"/>
+        <context ref="def:c-like-close-comment-outside-comment"/>
+        <context ref="string"/>
+        <context ref="single-quoted-string"/>
+        <context ref="class"/>
+        <context ref="js-code"/>
+      </include>
+    </context>
+    <!--main context-->
+
+  </definitions>
+</language>
