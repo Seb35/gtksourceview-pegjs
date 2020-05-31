@@ -17,6 +17,7 @@
   </metadata>
 
   <styles>
+    <style id="rule-def"        name="Rule definition"          map-to="def:identifier"/>
     <style id="escape"          name="Escaped Character"        map-to="def:special-char"/>
     <style id="string"          name="String"                   map-to="def:string"/>
     <style id="regex"           name="Regular Expression"       map-to="def:string"/>
@@ -93,6 +94,12 @@
         <context ref="escape"/>
         <context ref="def:line-continue"/>
       </include>
+    </context>
+
+    <!-- Does not work well because when the "=" is in the next line the following rule does not colour the "rule name" -->
+    <context id="rule-def" style-ref="rule-def">
+      <start>^(?=([^=]|\n)*=)</start>
+      <end>(\s|=)</end>
     </context>
 
     <!--main context-->
